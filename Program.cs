@@ -63,14 +63,14 @@ internal class Program
 
                         Console.WriteLine(" Success.");
 
+                        counter++;
+
                         if (Parameters.MailingDelay.Value > 0 && counter >= Parameters.MailingBunch.Value)
                         {
                             Console.Write($"Wait {Parameters.MailingDelay.Value} ms...");
                             Task.Delay(Parameters.MailingDelay.Value);
                             Console.WriteLine(" Done.");
                         }
-
-                        counter++;
                     }
                     catch (Exception e)
                     {
