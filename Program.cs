@@ -91,21 +91,12 @@ internal class Program
                     }
                 }
             }
-            catch (FieldValidationException e)
+            catch (Exception ex)
+                when (ex is FieldValidationException
+                   or HeaderValidationException)
             {
-                var error = e.Message.Split(Environment.NewLine)[0];
-                var rawRecord = e?.Context?.Reader?.Parser.RawRecord;
-                var row = e?.Context?.Reader?.Parser.Row;
-                var delimeter = e?.Context?.Reader?.Parser.Delimiter;
-
-                Console.WriteLine($"Error on parse file. {error}{Environment.NewLine}" +
-                    $"  with delimeter \"{delimeter}\"{Environment.NewLine}" +
-                    $"  at \"{rawRecord?.TrimEnd('\r', '\n')}\"{Environment.NewLine}" +
-                    $"  at {csvFileInfo}:line {row}");
-            }
-            catch (HeaderValidationException e)
-            {
-                var error = e.Message.Split(Environment.NewLine)[0];
+                var e = ex as CsvHelperException;
+                var error = e?.Message.Split(Environment.NewLine)[0];
                 var rawRecord = e?.Context?.Reader?.Parser.RawRecord;
                 var row = e?.Context?.Reader?.Parser.Row;
                 var delimeter = e?.Context?.Reader?.Parser.Delimiter;
